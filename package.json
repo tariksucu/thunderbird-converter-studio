@@ -1,0 +1,26 @@
+{
+  "name": "thunderbird-converter-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Converter Studio for Thunderbird: convert attachments (HEIC to JPG, Word to PDF, smaller PDFs, videos to MP4 and more) before you send or after you receive.",
+  "license": "MIT",
+  "author": "Converter Studio <support@converter.studio> (https://converter.studio)",
+  "homepage": "https://converter.studio",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tariksucu/thunderbird-converter-studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tariksucu/thunderbird-converter-studio/issues",
+    "email": "support@converter.studio"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "build": "node tools/build.mjs",
+    "lint": "node tools/build.mjs && tools/webext-linter.sh"
+  }
+}

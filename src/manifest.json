@@ -1,0 +1,55 @@
+{
+  "manifest_version": 3,
+  "name": "Converter Studio",
+  "version": "1.0.0",
+  "description": "Convert attachments with Converter Studio: iPhone photos to JPG, Word to PDF, smaller PDFs, videos to MP4 and more, before you send or after you receive.",
+  "author": "Converter Studio",
+  "homepage_url": "https://converter.studio",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "thunderbird@converter.studio",
+      "strict_min_version": "153.0"
+    }
+  },
+  "icons": {
+    "32": "icons/icon-32.png",
+    "64": "icons/icon-64.png",
+    "128": "icons/icon-128.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "type": "module"
+  },
+  "compose_action": {
+    "default_title": "Convert attachments with Converter Studio",
+    "default_label": "Convert",
+    "default_icon": "icons/toolbar-dark.svg",
+    "theme_icons": [
+      { "light": "icons/toolbar-light.svg", "dark": "icons/toolbar-dark.svg", "size": 16 },
+      { "light": "icons/toolbar-light.svg", "dark": "icons/toolbar-dark.svg", "size": 32 }
+    ],
+    "default_popup": "popup/compose.html"
+  },
+  "message_display_action": {
+    "default_title": "Convert an attachment with Converter Studio",
+    "default_label": "Convert",
+    "default_icon": "icons/toolbar-dark.svg",
+    "theme_icons": [
+      { "light": "icons/toolbar-light.svg", "dark": "icons/toolbar-dark.svg", "size": 16 },
+      { "light": "icons/toolbar-light.svg", "dark": "icons/toolbar-dark.svg", "size": 32 }
+    ],
+    "default_popup": "popup/message.html"
+  },
+  "options_ui": {
+    "page": "options/options.html"
+  },
+  "permissions": ["compose", "storage", "sensitiveDataUpload"],
+  "optional_permissions": ["messagesRead", "downloads"],
+  "host_permissions": ["https://converter.studio/*"],
+  "optional_host_permissions": [
+    "http://localhost/*",
+    "http://127.0.0.1/*",
+    "https://localhost/*",
+    "https://127.0.0.1/*"
+  ]
+}

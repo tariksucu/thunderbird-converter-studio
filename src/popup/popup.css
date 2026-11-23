@@ -1,0 +1,174 @@
+:root {
+  color-scheme: light dark;
+  --text: #16150f;
+  --muted: #5c5a52;
+  --line: #dedad0;
+  --surface: #ffffff;
+  --accent: #ff5418;
+  --accent-text: #ffffff;
+  --error: #b42318;
+  --done: #1a7f37;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #f2efe8;
+    --muted: #b3afa4;
+    --line: #3d3b35;
+    --surface: #1f1e1b;
+    --error: #ff8a80;
+    --done: #6fdc8c;
+  }
+}
+
+/* Thunderbird sizes a popup to its page: a fixed width keeps it from shrinking to the content. */
+body {
+  margin: 0;
+  padding: 12px 14px 10px;
+  width: 400px;
+  box-sizing: border-box;
+  font:
+    13px/1.4 system-ui,
+    sans-serif;
+  color: var(--text);
+  background: var(--surface);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+h1 {
+  font-size: 14px;
+  margin: 0;
+}
+
+ul.attachments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li.attachment {
+  border-top: 1px solid var(--line);
+  padding: 8px 0;
+}
+
+.file {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.size,
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+select {
+  max-width: 190px;
+}
+
+button {
+  font: inherit;
+  padding: 3px 10px;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+}
+
+button.primary:disabled {
+  opacity: 0.5;
+}
+
+button.link {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 0 4px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.state {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.state > span {
+  flex: 1;
+}
+
+.state.error {
+  color: var(--error);
+}
+
+.state.done {
+  color: var(--done);
+}
+
+progress {
+  width: 100%;
+  height: 6px;
+}
+
+.notice {
+  margin: 8px 0;
+}
+
+.notice.error {
+  color: var(--error);
+}
+
+.actions {
+  margin: 6px 0 0;
+}
+
+fieldset.mode {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 0;
+  padding: 8px 0 0;
+}
+
+fieldset.mode legend {
+  padding: 0;
+  color: var(--muted);
+}
+
+fieldset.mode label {
+  margin-right: 12px;
+}
+
+a {
+  color: inherit;
+}

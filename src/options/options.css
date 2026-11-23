@@ -1,0 +1,95 @@
+:root {
+  color-scheme: light dark;
+  --muted: #5c5a52;
+  --error: #b42318;
+  --done: #1a7f37;
+  --accent: #ff5418;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --muted: #b3afa4;
+    --error: #ff8a80;
+    --done: #6fdc8c;
+  }
+}
+
+body {
+  font:
+    14px/1.5 system-ui,
+    sans-serif;
+  margin: 0;
+  padding: 16px;
+}
+
+form {
+  max-width: 560px;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-top: 14px;
+}
+
+label.inline {
+  display: inline;
+  font-weight: normal;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+input[type='password'],
+input[type='text'],
+input[type='url'] {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: ui-monospace, monospace;
+}
+
+input[type='number'] {
+  width: 90px;
+}
+
+details {
+  margin-top: 14px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 12px;
+}
+
+.buttons {
+  margin-top: 16px;
+}
+
+button.primary {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  border-radius: 3px;
+  padding: 4px 14px;
+}
+
+#status.error {
+  color: var(--error);
+}
+
+#status.done {
+  color: var(--done);
+}

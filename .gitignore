@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+*.xpi
+.env
+.env.*
+.DS_Store
+# The Thunderbird linter's work folders and downloads.
+xpi-review-*/
+WEBEXT-LINTER-CACHE/

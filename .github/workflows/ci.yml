@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+
+# Cancel in-progress runs for the same branch/PR.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # Unit tests with a fake Converter Studio API and fake Thunderbird APIs: no network, no
+      # dependencies (Node's own test runner).
+      - name: Run tests
+        run: 'npm test'
+
+      # The XPI is src/ as it is, zipped.
+      - name: Build the XPI
+        run: 'npm run build'
+
+      # Thunderbird's own linter (thunderbird/webext-linter, pinned to one commit): the automated
+      # review addons.thunderbird.net starts from. Fails on errors; its manual-review notes are
+      # printed for a person.
+      - name: Lint with Thunderbird's webext-linter
+        run: 'tools/webext-linter.sh'
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xpi
+          path: dist/*.xpi
+          retention-days: 7
