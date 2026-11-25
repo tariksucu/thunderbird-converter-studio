@@ -19,7 +19,7 @@ Converter Studio adds formats, without an update of the add-on.
 - Thunderbird **153 ESR or newer** (tested on 153.7.0esr and 160.0).
 - A Converter Studio account and an API key: sign up at [converter.studio](https://converter.studio),
   then create a key on the [account page](https://converter.studio/account#api-keys). Free accounts get
-  13 credits a day; most photos and documents cost 1 credit; audio and video are priced by their
+  25 credits a day; most photos and documents cost 1 credit; audio and video are priced by their
   length, and video also by its frame size. See [pricing](https://converter.studio/pricing).
 
 ## Installation
