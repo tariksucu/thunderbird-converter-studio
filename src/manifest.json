@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Converter Studio",
-  "version": "1.0.0",
-  "description": "Convert attachments with Converter Studio: iPhone photos to JPG, Word to PDF, smaller PDFs, videos to MP4 and more, before you send or after you receive.",
+  "version": "1.1.0",
+  "description": "Fit attachments for sending: photos made smaller on your computer, free. Convert attachments with Converter Studio: iPhone photos to JPG, Word to PDF, videos to MP4 and more.",
   "author": "Converter Studio",
   "homepage_url": "https://converter.studio",
   "browser_specific_settings": {
@@ -21,7 +21,7 @@
     "type": "module"
   },
   "compose_action": {
-    "default_title": "Convert attachments with Converter Studio",
+    "default_title": "Fit attachments for sending, or convert them, with Converter Studio",
     "default_label": "Convert",
     "default_icon": "icons/toolbar-dark.svg",
     "theme_icons": [
@@ -39,6 +39,9 @@
       { "light": "icons/toolbar-light.svg", "dark": "icons/toolbar-dark.svg", "size": 32 }
     ],
     "default_popup": "popup/message.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; upgrade-insecure-requests;"
   },
   "options_ui": {
     "page": "options/options.html"

@@ -17,8 +17,9 @@ function walk(dir) {
     .flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
 }
 const sources = walk(SRC);
+// Our own code. vendor/ holds third-party releases as published (test/heic.test.js checks them).
 const code = sources
-  .filter((f) => /\.(js|html)$/.test(f))
+  .filter((f) => /\.(js|mjs|html)$/.test(f) && !path.relative(SRC, f).startsWith('vendor/'))
   .map((f) => ({ f: path.relative(SRC, f), text: fs.readFileSync(f, 'utf8') }));
 
 describe('the manifest', () => {
@@ -43,6 +44,13 @@ describe('the manifest', () => {
       'https://localhost/*',
       'https://127.0.0.1/*',
     ]);
+  });
+
+  it('allows WebAssembly (the HEIC decoder) and nothing else beyond the default policy', () => {
+    // Thunderbird's default for Manifest V3 is "script-src 'self'; upgrade-insecure-requests;".
+    assert.deepEqual(manifest.content_security_policy, {
+      extension_pages: "script-src 'self' 'wasm-unsafe-eval'; upgrade-insecure-requests;",
+    });
   });
 
   it('names Converter Studio and links to converter.studio', () => {

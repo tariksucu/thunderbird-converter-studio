@@ -55,11 +55,11 @@ export async function loadCatalog() {
 }
 
 /** "Add your API key first" with a way to the options page and to the key page. */
-export function setupNotice() {
+export function setupNotice(text = 'Add your Converter Studio API key to start converting.') {
   return el(
     'div',
     { className: 'notice', role: 'status' },
-    el('p', {}, 'Add your Converter Studio API key to start converting.'),
+    el('p', {}, text),
     el(
       'p',
       { className: 'actions' },
@@ -81,6 +81,7 @@ export function attachmentRow({
   size,
   job,
   chosen,
+  locked = false,
   onChoose,
   buttonText,
   onConvert,
@@ -89,7 +90,7 @@ export function attachmentRow({
 }) {
   const from = formatOf(catalog, name);
   const targets = targetsFor(catalog, from);
-  const busy = job && (job.state === 'working' || job.state === 'quoted');
+  const busy = locked || (job && (job.state === 'working' || job.state === 'quoted'));
   const row = el('li', { className: 'attachment', 'data-name': name });
   row.append(
     el(
@@ -182,11 +183,9 @@ function jobState(job, { onAnswer, onDismiss }) {
 }
 
 /** "Files are sent to converter.studio…" with the privacy policy. */
-export function privacyNote() {
-  return el(
-    'p',
-    { className: 'muted small' },
-    'Only the attachments you convert are sent to Converter Studio. It deletes them when the conversion finishes, and the result after 6 hours. ',
-    externalLink(PRIVACY_URL, 'Privacy policy'),
-  );
+export function privacyNote(
+  text = 'Only the attachments you convert are sent to Converter Studio. ' +
+    'It deletes them when the conversion finishes, and the result after 6 hours. ',
+) {
+  return el('p', { className: 'muted small' }, text, externalLink(PRIVACY_URL, 'Privacy policy'));
 }

@@ -1,8 +1,8 @@
 {
   "name": "thunderbird-converter-studio",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Converter Studio for Thunderbird: convert attachments (HEIC to JPG, Word to PDF, smaller PDFs, videos to MP4 and more) before you send or after you receive.",
+  "description": "Converter Studio for Thunderbird: fit attachments for sending (photos made smaller on your computer, free) and convert attachments (HEIC to JPG, Word to PDF, videos to MP4 and more).",
   "license": "MIT",
   "author": "Converter Studio <support@converter.studio> (https://converter.studio)",
   "homepage": "https://converter.studio",

@@ -5,7 +5,9 @@
  */
 
 /**
- * @typedef {{ id: string, name: string, category: string, extensions: string[], to: string[] }} FormatView
+ * `compress`: the server makes the format smaller in its own format (MP4 → MP4, MP3 → MP3…, asked
+ * for with a setting such as `emailFit`); false from servers before 2026-11-26.
+ * @typedef {{ id: string, name: string, category: string, extensions: string[], to: string[], compress: boolean }} FormatView
  * @typedef {{ formats: FormatView[], byId: Map<string, FormatView>, byExtension: Map<string, string> }} Catalog
  */
 
@@ -27,6 +29,7 @@ export function parseCatalog(body) {
         ? f.extensions.filter((e) => typeof e === 'string').map((e) => e.toLowerCase())
         : [],
       to: Array.isArray(f.to) ? f.to.filter((t) => typeof t === 'string') : [],
+      compress: f.compress === true,
     });
   }
   const byId = new Map(formats.map((f) => [f.id, f]));

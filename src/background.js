@@ -1,14 +1,18 @@
 /* global messenger */
+import { canvasBackend } from './lib/canvas.js';
 import { ConverterStudioClient } from './lib/client.js';
 import { ConverterStudioError, asConverterStudioError } from './lib/errors.js';
+import { Fitter } from './lib/fitter.js';
 import { parseCatalog } from './lib/formats.js';
 import { Jobs } from './lib/jobs.js';
+import { readPhoto, shrinkPhoto } from './lib/photos.js';
 import { loadSettings } from './lib/settings.js';
 
 /**
- * The background page: it runs the conversions (lib/jobs.js) for the two popups, keeps the
- * toolbar buttons' badges, and stays awake while a conversion runs. It stores nothing but the
- * settings (options page) and a copy of the API's format list.
+ * The background page: it runs the conversions (lib/jobs.js) and "Fit attachments for sending"
+ * (lib/fitter.js) for the popups, keeps the toolbar buttons' badges, and stays awake while either
+ * runs. It stores nothing but the settings (options page and the compose popup's choices) and a
+ * copy of the API's format list.
  */
 
 const VERSION = messenger.runtime.getManifest().version;
@@ -126,9 +130,30 @@ const jobs = new Jobs({
     messenger.runtime.sendMessage({ type: 'job', job }).catch(() => {});
     updateBadge(job.kind, job.tabId);
     keepAwake();
-    if (restartPending && !jobs.busy) restartSoon();
+    if (restartPending && !busy()) restartSoon();
   },
 });
+
+const fitter = new Fitter({
+  compose: messenger.compose,
+  photos: {
+    read: (file, kind) => readPhoto(file, kind, canvasBackend),
+    shrink: (photo, target) => shrinkPhoto(photo, target, canvasBackend),
+    release: (photo) => canvasBackend.release(photo.image),
+  },
+  settings: () => loadSettings(messenger.storage.local),
+  client: makeClient,
+  catalog: catalogFor,
+  onChange: (fit) => {
+    messenger.runtime.sendMessage({ type: 'fit', fit }).catch(() => {});
+    updateBadge('compose', fit.tabId);
+    keepAwake();
+    if (restartPending && !busy()) restartSoon();
+  },
+});
+
+/** Whether a conversion or a fit still runs somewhere. */
+const busy = () => jobs.busy || fitter.busy;
 
 /**
  * Thunderbird prepares its message APIs for an add-on when the add-on starts with `messagesRead`
@@ -148,16 +173,16 @@ function restartSoon() {
 /** The number of running conversions on the tab's toolbar button. */
 function updateBadge(kind, tabId) {
   const action = kind === 'compose' ? messenger.composeAction : messenger.messageDisplayAction;
-  const n = jobs.running(tabId);
+  const n = jobs.running(tabId) + (kind === 'compose' && fitter.active(tabId) ? 1 : 0);
   action.setBadgeText({ tabId, text: n ? String(n) : '' }).catch(() => {});
 }
 
 let awakeTimer = null;
 /** While a conversion runs, a call to Thunderbird now and then keeps this page from being ended. */
 function keepAwake() {
-  if (jobs.busy && !awakeTimer) {
+  if (busy() && !awakeTimer) {
     awakeTimer = setInterval(() => {
-      if (!jobs.busy) {
+      if (!busy()) {
         clearInterval(awakeTimer);
         awakeTimer = null;
         return;
@@ -182,11 +207,12 @@ async function handle(message) {
     case 'state':
       return {
         jobs: jobs.list(message.tabId),
+        fit: fitter.get(message.tabId),
         hasKey: Boolean((await loadSettings(messenger.storage.local)).apiKey),
         restartPending,
       };
     case 'restart-for-permissions':
-      if (jobs.busy) {
+      if (busy()) {
         restartPending = true;
         return { now: false };
       }
@@ -201,7 +227,18 @@ async function handle(message) {
       }
     }
     case 'compose:convert':
+      if (fitter.active(message.tabId))
+        return { error: 'Wait until the attachments are fitted for sending.' };
       return begin(() => jobs.convertComposeAttachment(message));
+    case 'fit:start':
+      if (jobs.running(message.tabId))
+        return { error: 'Wait until the conversion that is running finishes.' };
+      return begin(() => fitter.start(message));
+    case 'fit:answer':
+      return { ok: fitter.answer(message.tabId, message.yes) };
+    case 'fit:dismiss':
+      fitter.dismiss(message.tabId);
+      return { ok: true };
     case 'message:convert':
       return begin(() => jobs.convertMessageAttachment(message));
     case 'answer':
@@ -220,7 +257,10 @@ messenger.runtime.onMessage.addListener((message, sender) => {
   return handle(message);
 });
 
-messenger.tabs.onRemoved.addListener((tabId) => jobs.forgetTab(tabId));
+messenger.tabs.onRemoved.addListener((tabId) => {
+  jobs.forgetTab(tabId);
+  fitter.forgetTab(tabId);
+});
 
 // A new address or key may mean other formats: fetch the list again next time.
 messenger.storage.onChanged.addListener((changes, area) => {

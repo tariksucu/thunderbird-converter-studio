@@ -1,3 +1,5 @@
+import { normalizeTargetMb, EMAIL_ATTACHMENT_MB } from './fit.js';
+
 /**
  * The add-on's settings, kept with `storage.local`: in this Thunderbird profile on this computer
  * only (never synced), readable by this add-on alone, and deleted when the add-on is removed.
@@ -13,6 +15,8 @@ export const DEFAULTS = Object.freeze({
   maxCredits: DEFAULT_MAX_CREDITS,
   /** Compose window: `replace` the attachment, or `add` the converted file beside it. */
   composeMode: 'replace',
+  /** "Fit attachments for sending": the total in MB, 16 (Gmail, Yahoo Mail) or 10. */
+  fitTargetMb: EMAIL_ATTACHMENT_MB,
 });
 
 /** Hosts other than converter.studio the address may name: a test server on this computer. */
@@ -73,5 +77,6 @@ export async function loadSettings(storage) {
         ? DEFAULTS.maxCredits
         : normalizeMaxCredits(stored.maxCredits),
     composeMode: stored.composeMode === 'add' ? 'add' : 'replace',
+    fitTargetMb: normalizeTargetMb(stored.fitTargetMb),
   };
 }

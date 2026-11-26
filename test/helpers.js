@@ -5,7 +5,10 @@
 
 export const BASE = 'https://converter.studio/api';
 
-/** A trimmed copy of the API's `GET /v1/formats` answer (2026-11-23). */
+/**
+ * A trimmed copy of the API's `GET /v1/formats` answer (2026-11-23; `compress` as the API lists it
+ * from 2026-11-26).
+ */
 export const FORMATS_BODY = {
   formats: [
     {
@@ -21,9 +24,24 @@ export const FORMATS_BODY = {
       category: 'image',
       extensions: ['jpg', 'jpeg', 'jpe', 'jfif'],
       to: ['pdf', 'png', 'webp'],
+      compress: true,
     },
-    { id: 'png', name: 'PNG', category: 'image', extensions: ['png'], to: ['jpg', 'pdf', 'webp'] },
-    { id: 'webp', name: 'WebP', category: 'image', extensions: ['webp'], to: ['jpg', 'png'] },
+    {
+      id: 'png',
+      name: 'PNG',
+      category: 'image',
+      extensions: ['png'],
+      to: ['jpg', 'pdf', 'webp'],
+      compress: true,
+    },
+    {
+      id: 'webp',
+      name: 'WebP',
+      category: 'image',
+      extensions: ['webp'],
+      to: ['jpg', 'png'],
+      compress: true,
+    },
     {
       id: 'docx',
       name: 'DOCX',
@@ -37,6 +55,7 @@ export const FORMATS_BODY = {
       category: 'document',
       extensions: ['pdf'],
       to: ['jpg', 'pdf', 'docx', 'png'],
+      compress: true,
     },
     {
       id: 'mov',
@@ -51,6 +70,7 @@ export const FORMATS_BODY = {
       category: 'video',
       extensions: ['mp4', 'm4v'],
       to: ['mp3', 'webm', 'mov'],
+      compress: true,
     },
     { id: 'tgz', name: 'TAR.GZ', category: 'archive', extensions: ['tar.gz', 'tgz'], to: ['zip'] },
     { id: 'gz', name: 'GZ', category: 'archive', extensions: ['gz'], to: ['zip'] },

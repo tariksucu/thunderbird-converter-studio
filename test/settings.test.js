@@ -61,6 +61,7 @@ describe('stored settings', () => {
       baseUrl: 'https://converter.studio/api',
       maxCredits: 20,
       composeMode: 'replace',
+      fitTargetMb: 16,
     });
   });
 
@@ -72,6 +73,7 @@ describe('stored settings', () => {
           baseUrl: 'https://evil.example/api',
           maxCredits: 0,
           composeMode: 'add',
+          fitTargetMb: 10,
         }),
       ),
       {
@@ -79,8 +81,14 @@ describe('stored settings', () => {
         baseUrl: 'https://converter.studio/api',
         maxCredits: 0,
         composeMode: 'add',
+        fitTargetMb: 10,
       },
     );
+  });
+
+  it('keep the fit target at 16 or 10 MB', async () => {
+    assert.equal((await loadSettings(storage({ fitTargetMb: 12 }))).fitTargetMb, 16);
+    assert.equal((await loadSettings(storage({ fitTargetMb: '10' }))).fitTargetMb, 10);
   });
 
   it('read a credit limit as a whole number from 0 to 100000', () => {

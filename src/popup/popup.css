@@ -172,3 +172,45 @@ fieldset.mode label {
 a {
   color: inherit;
 }
+
+h2 {
+  font-size: 13px;
+  margin: 12px 0 4px;
+}
+
+section.fit {
+  padding-bottom: 8px;
+}
+
+section.fit .controls {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+section.fit .controls button {
+  white-space: nowrap;
+}
+
+section.fit select {
+  max-width: none;
+}
+
+section.fit p {
+  margin: 0 0 6px;
+}
+
+.fit-result {
+  margin: 6px 0 8px;
+}
+
+.fit-state .actions {
+  flex-basis: 100%;
+}
+
+.fit-result .line {
+  margin: 4px 0 0;
+}
+
+.state.over {
+  color: var(--text);
+}
